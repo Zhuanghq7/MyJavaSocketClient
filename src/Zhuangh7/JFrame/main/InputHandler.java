@@ -7,10 +7,12 @@ import java.awt.event.MouseListener;
 
 public class InputHandler implements KeyListener,MouseListener{
 
+	private static final String MouseEvent = null;
+
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+		MainClass.mouseClicked(arg0);
 	}
 
 	@Override
@@ -39,6 +41,7 @@ public class InputHandler implements KeyListener,MouseListener{
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
+		MainClass.keyPressed(arg0);
 		// TODO Auto-generated method stub
 		
 	}
