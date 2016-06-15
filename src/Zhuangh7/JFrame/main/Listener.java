@@ -8,7 +8,7 @@ import java.net.Socket;
 
 public class Listener extends Thread{
 	public boolean listennn = true;
-	private BufferedReader br;
+	public BufferedReader br;
 	private Socket ss;
 	public Listener(Socket ss){
 		this.ss = ss;
@@ -22,11 +22,14 @@ public class Listener extends Thread{
 		
 			String read;
 			read = br.readLine();
-			while(read!="close"&&listennn == true){
+			while((!read.equals("close"))&&(listennn == true)){
 				if(read!=null){
 					MainClass.print("接收到："+read);
 				}
 				read = br.readLine();
+			}
+			if(read.equals("close")){
+				MainClass.print("对方关闭了客户端");
 			}
 			br.close();
 			

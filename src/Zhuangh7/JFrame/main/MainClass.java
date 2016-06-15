@@ -62,9 +62,13 @@ public class MainClass {
 		    { 
 				if(ss!=null){
 					try {
-						ss.close();
 						if(listener!=null){
 							listener.listennn = false;
+						//	listener.br.close();
+						}
+						if(ss!=null){
+							out("close");
+							ss.close();
 						}
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
@@ -109,11 +113,13 @@ public class MainClass {
 				}
 				if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 					try {
-						if(ss!=null){
-							ss.close();
-						}
 						if(listener!=null){
 							listener.listennn = false;
+						//	listener.br.close();
+						}
+						if(ss!=null){
+							out("close");
+							ss.close();
 						}
 						System.exit(0);
 					} catch (IOException e) {
