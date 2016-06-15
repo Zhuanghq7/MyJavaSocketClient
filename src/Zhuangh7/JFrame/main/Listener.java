@@ -24,7 +24,7 @@ public class Listener extends Thread{
 			read = br.readLine();
 			while(read!="close"&&listennn == true){
 				if(read!=null){
-					MainClass.print(""+read);
+					MainClass.print("Ω” ’µΩ£∫"+read);
 				}
 				read = br.readLine();
 			}

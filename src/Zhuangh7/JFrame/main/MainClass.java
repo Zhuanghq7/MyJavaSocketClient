@@ -18,6 +18,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -54,6 +56,25 @@ public class MainClass {
 		Win.addMouseListener(I);
 		Win.addKeyListener(I);
 		Win.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		Win.addWindowListener(new WindowAdapter(){
+			public void windowClosing(WindowEvent e)
+		    { 
+				if(ss!=null){
+					try {
+						ss.close();
+						if(listener!=null){
+							listener.listennn = false;
+						}
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				System.exit(0); 
+			}     
+		});
+		
 		int width = (int)screensize.getWidth();
 		int height = (int)screensize.getHeight();
 		Win.setLocation((width-WIN_WIDTH)/2, (height-WIN_HEIGHT)/2);
@@ -83,13 +104,18 @@ public class MainClass {
 					readline=tf.getText().toString();
 					out(readline);
 					//System.out.println("Client:"+readline);
-					
+					print('`'+tf.getText());
 					tf.setText("");
 				}
 				if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 					try {
-						ss.close();
-						listener.listennn = false;
+						if(ss!=null){
+							ss.close();
+						}
+						if(listener!=null){
+							listener.listennn = false;
+						}
+						System.exit(0);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -149,7 +175,7 @@ public class MainClass {
 	
 	public static void initLabel(){
 		for(int i = 0;i<Str_NUM;i++){
-			JLabel temp = new JLabel(""+(i+1));
+			JLabel temp = new JLabel(""+'`');
 			label.add(temp);
 		}
 	}
