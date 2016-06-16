@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
+import java.util.Vector;
 
 import javax.imageio.ImageIO;
 
@@ -18,13 +19,15 @@ public class Listener_image extends Thread{
 	public boolean listennn = true;
 	public BufferedReader br;
 	private Socket ss;
+	private CanvasFrame canvas = null;
+	public static Vector<BufferedImage> images = new Vector<BufferedImage>();
 	public Listener_image(Socket ss){
 		this.ss = ss;
 	}
 	@Override  
     public void run() { 
 		try {
-			
+			new show(null).start();
 			InputStream is = ss.getInputStream();
 			DataInputStream dis = new DataInputStream(is);
 			int size = dis.readInt();
@@ -32,19 +35,23 @@ public class Listener_image extends Thread{
     			if(size!=0){
     				if(size == -1){
     					listennn = false;
-    				}
+    				} 
 	    			//Size.add(size);
 	                byte[] data = new byte[size];    
 	                int len = 0;    
+	                try{
 	                while (len < size) {    
 	                    len += dis.read(data, len, size - len);    
+	                }
+	                }catch(IOException e){
+	                	MainClass.print("e");
 	                }
 	               // map.add(data);
 	                ByteArrayInputStream in = new ByteArrayInputStream(data);    //将b作为输入流；
 	                BufferedImage image = ImageIO.read(in);
-	                MainClass.print("接收到了一张图片");
-	                CanvasFrame canvas = new CanvasFrame("Image",1);
-	                canvas.showImage(image);
+	               // MainClass.print("接收图片"+size);
+	                //MainClass.print("缓存大小"+images.size());
+	                images.addElement(image);
     			}
     			size = dis.readInt();
 			}

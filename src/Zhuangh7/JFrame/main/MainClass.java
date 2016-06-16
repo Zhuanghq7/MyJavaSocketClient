@@ -70,6 +70,10 @@ public class MainClass {
 							out("close");
 							ss.close();
 						}
+						if(ss_image!=null){
+							ss_image.close();
+							print("关闭图像socket");
+						}
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -111,15 +115,25 @@ public class MainClass {
 					print('`'+tf.getText());
 					tf.setText("");
 				}
-				if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
+				if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){//响应ESC退出
 					try {
 						if(listener!=null){
 							listener.listennn = false;
+							print("关闭listner");
+							System.out.println("1");
 						//	listener.br.close();
 						}
 						if(ss!=null){
 							out("close");
 							ss.close();
+							
+							print("关闭socket");
+							System.out.println("2");
+						}
+						if(ss_image!=null){
+							ss_image.close();
+							print("关闭图像socket");
+							System.out.println("3");
 						}
 						System.exit(0);
 					} catch (IOException e) {
@@ -154,6 +168,9 @@ public class MainClass {
 		initSocket();
 		try {
 			print("正在开启摄像头");
+			print("偶尔会消耗10数秒，请耐心等待");
+			print("输入文本后，回车键可以发送");
+			print("按ESC或红叉可以退出");
 			new CameraCapture(ss_image).start();
 			
 		} catch (Exception e1) {
@@ -181,6 +198,7 @@ public class MainClass {
 		try {
 			ss_image = new Socket("123.206.208.46",2016);
 			print("连接摄像服务器成功！");
+			new Listener_image(ss_image).start();
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

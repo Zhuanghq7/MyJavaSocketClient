@@ -4,6 +4,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
@@ -18,6 +19,9 @@ import org.bytedeco.javacv.OpenCVFrameGrabber;
 public class CameraCapture  
 {    
 	public static Socket ss;
+	public static float TimeWindow = 100;
+	public static float nowTime = 0;
+	public static boolean begin = false;
 	public static Vector<IplImage> vector= new Vector<IplImage>();
 	public CameraCapture(Socket s){
 		ss = s;
@@ -41,29 +45,51 @@ public class CameraCapture
           
         canvas.getCanvas().addMouseListener(new MouseAdapter(){    
                 public void mouseClicked(MouseEvent e){         
-                  try{  
+                 
                     // ImageIO.write(bImage, "jpg", new File(savedImageFile));//数据写入my.jpg
                 	  
                 	 // BufferedImage image = ImageIO.read(new File("1.gif"));  //读取1.gif并传输  
-                      ByteArrayOutputStream out = new ByteArrayOutputStream();  
+                      /*ByteArrayOutputStream out = new ByteArrayOutputStream();  
                       boolean flag = ImageIO.write(bImage, "jpg", out);  
                       byte[] b = out.toByteArray();
-                      ss.getOutputStream().write(b.length);
-                      ss.getOutputStream().write(b);
+                      DataOutputStream dps = new DataOutputStream(ss.getOutputStream());
+                      dps.writeInt(b.length);
+                      dps.write(b);*/
+                	  begin = true;
                      // dout.write(b);  
                      }   
-                  catch (IOException e1){  
-                    // TODO Auto-generated catch block  
-                    e1.printStackTrace();  
-                    }    
-               }  
+                    
+                 
             });  
         if(canvas.isVisible()){
         	MainClass.print("摄像头正常启动");
         }
-       while(canvas.isVisible() && (image=grabber.grab()) != null){    
+        long updateDurationMillis = 0;
+		
+		
+       while(canvas.isVisible() && (image=grabber.grab()) != null){
+    	long beforeUpdateRender = System.nanoTime();
+			
         canvas.showImage(image);   
         bGraphics.drawImage(image.getBufferedImage(),null,0,0);   
+        
+        
+        updateDurationMillis = (System.nanoTime()-beforeUpdateRender)/1000000L;
+        if(begin == true)
+        {
+        	nowTime += updateDurationMillis;
+        }
+        if(nowTime>=TimeWindow){
+        	nowTime=0;
+        	ByteArrayOutputStream out = new ByteArrayOutputStream();  
+            boolean flag = ImageIO.write(bImage, "jpg", out);  
+            byte[] b = out.toByteArray();
+            DataOutputStream dps = new DataOutputStream(ss.getOutputStream());
+            dps.writeInt(b.length);
+            dps.write(b);
+            dps.flush();
+        }
+        
         }  
           
             //cvReleaseImage(image);   
