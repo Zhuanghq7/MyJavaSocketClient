@@ -35,6 +35,7 @@ public class MainClass {
 	public static final int WIN_HEIGHT = 700;
 	public static int Tag = 0;
 	public static Socket ss;
+	public static Socket ss_image;
 	//public static Main_WIN mainWin;
 	static Dimension   screensize   =   Toolkit.getDefaultToolkit().getScreenSize();
 	static JPanel p1 = new JPanel();
@@ -56,7 +57,6 @@ public class MainClass {
 		Win.addMouseListener(I);
 		Win.addKeyListener(I);
 		Win.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		Win.addWindowListener(new WindowAdapter(){
 			public void windowClosing(WindowEvent e)
 		    { 
@@ -152,6 +152,15 @@ public class MainClass {
 		//Win.setSize(200,400);
 		Win.setVisible(true);
 		initSocket();
+		try {
+			print("正在开启摄像头");
+			new CameraCapture(ss_image).start();
+			
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			print("摄像头启动失败");
+		}
 	}
 	
 	public static void initSocket(){
@@ -168,6 +177,18 @@ public class MainClass {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			print("连接服务器失败！");
+		}
+		try {
+			ss_image = new Socket("123.206.208.46",2016);
+			print("连接摄像服务器成功！");
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			print("连接摄像服务器失败！");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			print("连接摄像服务器失败！");
 		}
 	}
 	
